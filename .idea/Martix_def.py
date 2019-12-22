@@ -2,12 +2,12 @@ import numpy as np
 import random
 import matplotlib.pyplot as plt
 import seaborn as sns
-#import math
+
 
 #设定超参数
-M = 4              #可用基站数
+M = 5              #可用基站数
 K = 2              #可用基站频点
-N = 6               #申请用户数量
+N = 10               #申请用户数量
 
 def Location_matrix_df(n,m,k):
     Location_matrix = np.zeros(shape=(n,m,k),dtype=int)
@@ -17,11 +17,20 @@ def Location_matrix_df(n,m,k):
 
 def Location_matrix_show(Location_matrix):
     Location_matrix_2D = Location_matrix[:,:,0]
-    sns.heatmap(Location_matrix_2D ,annot=False, vmin=0, vmax=2, cmap="Blues", xticklabels=False  ,
+    sns.heatmap(Location_matrix_2D ,annot=False, vmin=0, vmax=1, cmap="Blues", xticklabels=False  ,
                     yticklabels =False   )
     plt.xlabel ('Base')
     plt.ylabel ('Users')
     plt.show()
+
+def Allocation_matrix_show(n,m,k,Allocation_matrix):
+    Allocation_matrix_2D = Allocation_matrix.reshape(n,m * k)
+    sns.heatmap(Allocation_matrix_2D ,annot=False, vmin=0, vmax=1, cmap="Greens", xticklabels=False,
+                    yticklabels =False   )
+    plt.xlabel ('Base * Frequence')
+    plt.ylabel ('Users')
+    plt.show()
+
 
 def Random_Allocation_matrix_df(n,m,k,Location_matrix):
     Random_Allocation_matrix = np.zeros(shape=(n,m,k),dtype=int)
@@ -57,18 +66,20 @@ def I_caculate(n,m,k,Allocation_matrix):
 
 def R_caculate(n,m,k,Allocation_matrix,I_matrix):
     Allocation_matrix_float = Allocation_matrix.astype(np.float)
-    r = np.sum(np.log2(1 + Allocation_matrix_float/I_matrix))
+    r = np.sum(np.log2(1 + Allocation_matrix_float/(I_matrix + 1e-5)))
     return r
 
 Location_matrix = Location_matrix_df(N, M, K)
 #print(Location_matrix)
-#Location_matrix_show(Location_matrix)
+
 
 Random_Allocation_matrix = Random_Allocation_matrix_df(N, M, K,Location_matrix)
 
-print(Random_Allocation_matrix)
+#print(Random_Allocation_matrix)
 Allocation_matrix = Random_Allocation_matrix
 I_matrix = I_caculate(N, M, K,Allocation_matrix)
-print(I_matrix)
+#print(I_matrix)
 r = R_caculate(N, M, K,Allocation_matrix,I_matrix)
 print ("对于当前矩阵，总传输速率为%g"%(r))
+Location_matrix_show(Location_matrix)
+Allocation_matrix_show(N, M, K,Allocation_matrix)
