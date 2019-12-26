@@ -5,9 +5,9 @@ import seaborn as sns
 
 
 #设定超参数
-M = 3              #可用基站数
-K = 10              #可用基站频点
-N =  40             #申请用户数量
+M = 8              #可用基站数
+K = 20              #可用基站频点
+N = 60             #申请用户数量
 EPXILONG = 0.3      #设置ε值
 
 
@@ -47,11 +47,11 @@ def Random_Allocation_matrix_df(n,m,k,Location_matrix):
 
                     if flag == 1:
                         flag = 0
-                        print("对于基站%d范围内%d号用户,频段 %d 已被占用" % (l,i,x))
+                        #print("对于基站%d范围内%d号用户,频段 %d 已被占用" % (l,i,x))
                     else:
                         flag = 0
                         Random_Allocation_matrix[i, l, x] = 1
-                        print("基站%d范围内%d号用户,频段 %d 成功分配" % (l, i, x))
+                        #print("基站%d范围内%d号用户,频段 %d 成功分配" % (l, i, x))
                         print("%d号用户,随机分配成功" % ( i))
                         num = num + 1
                         break
@@ -74,7 +74,7 @@ def Greedy_Allocation_matrix(n,m,k,Location_matrix):
             if np.all(Location_matrix[i, l, 0]) == 1:
                 max_R = 0
                 next_R = 0
-                Greedy_Allocation_matrix_2 = Greedy_Allocation_matrix
+                Greedy_Allocation_matrix_2[i,:,:] = Greedy_Allocation_matrix[i,:,:]
                 for x in range(k):
                     for j in range(n):
                         flag = flag + Greedy_Allocation_matrix[j, l, x]  # 观察x号频段是否有人使用
@@ -97,9 +97,9 @@ def Greedy_Allocation_matrix(n,m,k,Location_matrix):
                             max_R = next_R
                             print("贪心算法更迭一次")
         if np.sum(Greedy_Allocation_matrix[i, :, :]) == 0:
-            print("%d号用户,随机分配失败" % (i))
+             print("%d号用户,贪心分配失败" % (i))
         else:
-            print("%d号用户,随机分配成功" % (i))
+            print("%d号用户,贪心分配成功" % (i))
             num = num +1
     return Greedy_Allocation_matrix,num
 
@@ -111,15 +111,16 @@ def Epxilong_Greedy_Allocation_matrix(n,m,k,Location_matrix):
     max_R = 0
     next_R = 0
     num = 0
-    epsilong = random.random()
+    epsilong = 0
     for i in range (n):
+        epsilong = random.random()
         if epsilong >=EPXILONG :
             print("%d号申请者使用贪心分配" %(i))
             for l in range(m):
                 if np.all(Location_matrix[i, l, 0]) == 1:
                     max_R = 0
                     next_R = 0
-                    Ep_Greedy_Allocation_matrix_2 = Ep_Greedy_Allocation_matrix
+                    Ep_Greedy_Allocation_matrix_2[i,:,:] = Ep_Greedy_Allocation_matrix[i,:,:]
                     for x in range(k):
                         for j in range(n):
                             flag = flag + Ep_Greedy_Allocation_matrix[j, l, x]  # 观察x号频段是否有人使用
@@ -181,7 +182,7 @@ def I_caculate(n,m,k,Allocation_matrix):
 #计算分配矩阵传输数据量
 def R_caculate(n,m,k,Allocation_matrix,I_matrix):
     Allocation_matrix_float = Allocation_matrix.astype(np.float)
-    r = np.sum(np.log2(1 + Allocation_matrix_float/(I_matrix + 1e-5)))
+    r = np.sum(np.log2(1 + Allocation_matrix_float/(I_matrix/(n/(m*k)) + 0.01)))
     return r
 
 
@@ -216,7 +217,8 @@ r3 = R_caculate(N, M, K,Allocation_matrix3,I_matrix3)
 Location_matrix_show(Location_matrix)
 print ("对于随机矩阵，对于%d位申请者，成功分配%d人,总传输速率为%g"%(N,num1,r1))
 print ("对于贪心矩阵，对于%d位申请者，成功分配%d人,总传输速率为%g"%(N,num2,r2))
-print ("对于贪心矩阵，对于%d位申请者，成功分配%d人,总传输速率为%g"%(N,num3,r3))
+print ("对于改进贪心矩阵，对于%d位申请者，成功分配%d人,总传输速率为%g"%(N,num3,r3))
 Allocation_matrix_show(N, M, K,Allocation_matrix1)
 Allocation_matrix_show(N, M, K,Allocation_matrix2)
 Allocation_matrix_show(N, M, K,Allocation_matrix3)
+
