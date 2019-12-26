@@ -5,9 +5,11 @@ import seaborn as sns
 
 
 #设定超参数
-M = 5              #可用基站数
-K = 2              #可用基站频点
-N = 10               #申请用户数量
+M = 3              #可用基站数
+K = 10              #可用基站频点
+N =  40             #申请用户数量
+EPXILONG = 0.3      #设置ε值
+
 
 def Location_matrix_df(n,m,k):
     Location_matrix = np.zeros(shape=(n,m,k),dtype=int)
@@ -31,9 +33,10 @@ def Allocation_matrix_show(n,m,k,Allocation_matrix):
     plt.ylabel ('Users')
     plt.show()
 
-
+#定义随机分配矩阵
 def Random_Allocation_matrix_df(n,m,k,Location_matrix):
     Random_Allocation_matrix = np.zeros(shape=(n,m,k),dtype=int)
+    num = 0
     flag = 0
     for i in range(n):
         for l in range(m):
@@ -50,12 +53,123 @@ def Random_Allocation_matrix_df(n,m,k,Location_matrix):
                         Random_Allocation_matrix[i, l, x] = 1
                         print("基站%d范围内%d号用户,频段 %d 成功分配" % (l, i, x))
                         print("%d号用户,随机分配成功" % ( i))
+                        num = num + 1
                         break
         if np.sum(Random_Allocation_matrix[i,:,:])==0:
             print("%d号用户,随机分配失败" % ( i))
 
-    return Random_Allocation_matrix
+    return Random_Allocation_matrix,num
 
+
+#定义贪心算法分配矩阵
+def Greedy_Allocation_matrix(n,m,k,Location_matrix):
+    Greedy_Allocation_matrix = np.zeros(shape=(n, m, k), dtype=int)
+    Greedy_Allocation_matrix_2 = np.zeros(shape=(n, m, k), dtype=int)
+    flag = 0
+    max_R = 0
+    next_R = 0
+    num = 0
+    for i in range (n):
+        for l in range(m):
+            if np.all(Location_matrix[i, l, 0]) == 1:
+                max_R = 0
+                next_R = 0
+                Greedy_Allocation_matrix_2 = Greedy_Allocation_matrix
+                for x in range(k):
+                    for j in range(n):
+                        flag = flag + Greedy_Allocation_matrix[j, l, x]  # 观察x号频段是否有人使用
+
+                    if flag == 1:
+                        flag = 0
+                        print("对于基站%d范围内%d号用户,频段 %d 已被占用" % (l, i, x))
+
+                    else:
+                        flag = 0
+                        Greedy_Allocation_matrix_2[i, l, x] = 1
+                        I_caculate(n, m, k, Greedy_Allocation_matrix_2)
+                        I_matrix = I_caculate(n, m, k, Greedy_Allocation_matrix_2)
+                        Allocation_matrix = Greedy_Allocation_matrix_2
+                        next_R = R_caculate(n, m, k, Allocation_matrix, I_matrix)
+                        Greedy_Allocation_matrix_2[i, l, x] = 0
+                        if (next_R > max_R):
+                            Greedy_Allocation_matrix[i, l, :] = 0
+                            Greedy_Allocation_matrix[i, l, x] = 1
+                            max_R = next_R
+                            print("贪心算法更迭一次")
+        if np.sum(Greedy_Allocation_matrix[i, :, :]) == 0:
+            print("%d号用户,随机分配失败" % (i))
+        else:
+            print("%d号用户,随机分配成功" % (i))
+            num = num +1
+    return Greedy_Allocation_matrix,num
+
+#定义ε—贪心算法分配矩阵
+def Epxilong_Greedy_Allocation_matrix(n,m,k,Location_matrix):
+    Ep_Greedy_Allocation_matrix = np.zeros(shape=(n, m, k), dtype=int)
+    Ep_Greedy_Allocation_matrix_2 = np.zeros(shape=(n, m, k), dtype=int)
+    flag = 0
+    max_R = 0
+    next_R = 0
+    num = 0
+    epsilong = random.random()
+    for i in range (n):
+        if epsilong >=EPXILONG :
+            print("%d号申请者使用贪心分配" %(i))
+            for l in range(m):
+                if np.all(Location_matrix[i, l, 0]) == 1:
+                    max_R = 0
+                    next_R = 0
+                    Ep_Greedy_Allocation_matrix_2 = Ep_Greedy_Allocation_matrix
+                    for x in range(k):
+                        for j in range(n):
+                            flag = flag + Ep_Greedy_Allocation_matrix[j, l, x]  # 观察x号频段是否有人使用
+
+                        if flag == 1:
+                            flag = 0
+                            print("对于基站%d范围内%d号用户,频段 %d 已被占用" % (l, i, x))
+
+                        else:
+                            flag = 0
+                            Ep_Greedy_Allocation_matrix_2[i, l, x] = 1
+                            I_caculate(n, m, k, Ep_Greedy_Allocation_matrix_2)
+                            I_matrix = I_caculate(n, m, k, Ep_Greedy_Allocation_matrix_2)
+                            Allocation_matrix = Ep_Greedy_Allocation_matrix_2
+                            next_R = R_caculate(n, m, k, Allocation_matrix, I_matrix)
+                            Ep_Greedy_Allocation_matrix_2[i, l, x] = 0
+                            if (next_R > max_R):
+                                Ep_Greedy_Allocation_matrix[i, l, :] = 0
+                                Ep_Greedy_Allocation_matrix[i, l, x] = 1
+                                max_R = next_R
+                                print("贪心算法更迭一次")
+        else:
+            print("%d号申请者使用随机分配" % (i))
+            for l in range(m):
+                if np.all(Location_matrix[i, l, 0]) == 1:
+                    for x in range(k):
+                        for j in range(n):
+                            flag = flag + Ep_Greedy_Allocation_matrix[j, l, x]  # 观察x号频段是否有人使用
+
+                        if flag == 1:
+                            flag = 0
+                            print("对于基站%d范围内%d号用户,频段 %d 已被占用" % (l, i, x))
+                        else:
+                            flag = 0
+                            Ep_Greedy_Allocation_matrix[i, l, x] = 1
+                            print("基站%d范围内%d号用户,频段 %d 成功分配" % (l, i, x))
+                            print("%d号用户,随机分配成功" % (i))
+                            break
+
+
+        if np.sum(Ep_Greedy_Allocation_matrix[i, :, :]) == 0:
+            print("%d号用户,随机分配失败" % (i))
+        else:
+            print("%d号用户,随机分配成功" % (i))
+            num = num +1
+    return Ep_Greedy_Allocation_matrix,num
+
+
+
+#计算分配矩阵干扰
 def I_caculate(n,m,k,Allocation_matrix):
     I_matrix = np.zeros(shape=(n,m,k),dtype=int)
     for l in range (k):
@@ -64,22 +178,45 @@ def I_caculate(n,m,k,Allocation_matrix):
                 I_matrix[i,j,l] = np.sum(Allocation_matrix[:,:,l]) - np.sum(Allocation_matrix[:,j,l])
     return I_matrix
 
+#计算分配矩阵传输数据量
 def R_caculate(n,m,k,Allocation_matrix,I_matrix):
     Allocation_matrix_float = Allocation_matrix.astype(np.float)
     r = np.sum(np.log2(1 + Allocation_matrix_float/(I_matrix + 1e-5)))
     return r
 
+
+#生成连接矩阵
 Location_matrix = Location_matrix_df(N, M, K)
 #print(Location_matrix)
 
 
-Random_Allocation_matrix = Random_Allocation_matrix_df(N, M, K,Location_matrix)
-
+#随机算法
+Random_Allocation_matrix,num1 = Random_Allocation_matrix_df(N, M, K,Location_matrix)
+Allocation_matrix1 = Random_Allocation_matrix
+I_matrix1 = I_caculate(N, M, K,Allocation_matrix1)
+r1 = R_caculate(N, M, K,Allocation_matrix1,I_matrix1)
+#Allocation_matrix_show(N, M, K,Allocation_matrix1)
 #print(Random_Allocation_matrix)
-Allocation_matrix = Random_Allocation_matrix
-I_matrix = I_caculate(N, M, K,Allocation_matrix)
+#Allocation_matrix = Random_Allocation_matrix
+
+#贪心算法
+Allocation_matrix2,num2 = Greedy_Allocation_matrix(N, M, K,Location_matrix)
+I_matrix2 = I_caculate(N, M, K,Allocation_matrix2)
 #print(I_matrix)
-r = R_caculate(N, M, K,Allocation_matrix,I_matrix)
-print ("对于当前矩阵，总传输速率为%g"%(r))
+r2 = R_caculate(N, M, K,Allocation_matrix2,I_matrix2)
+#Location_matrix_show(Location_matrix)
+#Allocation_matrix_show(N, M, K,Allocation_matrix)
+
+#ε—贪心算法
+Allocation_matrix3,num3 = Epxilong_Greedy_Allocation_matrix(N, M, K,Location_matrix)
+I_matrix3 = I_caculate(N, M, K,Allocation_matrix3)
+#print(I_matrix)
+r3 = R_caculate(N, M, K,Allocation_matrix3,I_matrix3)
+
 Location_matrix_show(Location_matrix)
-Allocation_matrix_show(N, M, K,Allocation_matrix)
+print ("对于随机矩阵，对于%d位申请者，成功分配%d人,总传输速率为%g"%(N,num1,r1))
+print ("对于贪心矩阵，对于%d位申请者，成功分配%d人,总传输速率为%g"%(N,num2,r2))
+print ("对于贪心矩阵，对于%d位申请者，成功分配%d人,总传输速率为%g"%(N,num3,r3))
+Allocation_matrix_show(N, M, K,Allocation_matrix1)
+Allocation_matrix_show(N, M, K,Allocation_matrix2)
+Allocation_matrix_show(N, M, K,Allocation_matrix3)
