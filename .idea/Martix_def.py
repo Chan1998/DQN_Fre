@@ -9,7 +9,7 @@ import seaborn as sns
 #K = 100              #可用基站频点
 #N = 70             #申请用户数量
 EPXILONG = 0.1      #设置ε值
-T = 25              #设置测试大小
+T = 3              #设置测试大小
 
 def Location_matrix_df(n,m,k):
     Location_matrix = np.zeros(shape=(n,m,k),dtype=int)
@@ -278,6 +278,7 @@ def main():
     plt.xlabel("Frequence")
     plt.ylabel("H")
     plt.title("Frequence_influence")
+    plt.savefig("200F")
     plt.figure()
     plt.plot(k, r12,color='r',linestyle=':',marker='^',label='random')
     plt.plot(k, r22, color='c',linestyle='-.',marker='o',label='Greedy')
@@ -286,6 +287,7 @@ def main():
     plt.xlabel("Base")
     plt.ylabel("H")
     plt.title("Base_influence")
+    plt.savefig("200B")
     plt.figure()
     plt.plot(k, r13,color='r',linestyle=':',marker='^',label='random')
     plt.plot(k, r23, color='c',linestyle='-.',marker='o',label='Greedy')
@@ -294,6 +296,7 @@ def main():
     plt.ylabel("H")
     plt.title("Users_influence")
     plt.legend()
+    plt.savefig("200U")
     plt.show()
 
 

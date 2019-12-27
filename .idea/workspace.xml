@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d19da8ca-d545-4d22-8669-d3ec1b5843bd" name="默认" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/DQN_Fre_Allocation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DQN_Fre_Allocation.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Martix_def.py" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Martix_def.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
