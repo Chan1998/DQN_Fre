@@ -9,7 +9,7 @@ import seaborn as sns
 #K = 100              #可用基站频点
 #N = 70             #申请用户数量
 EPXILONG = 0.1      #设置ε值
-T = 3              #设置测试大小
+T = 200              #设置测试大小
 
 def Location_matrix_df(n,m,k):
     Location_matrix = np.zeros(shape=(n,m,k),dtype=int)
@@ -260,14 +260,14 @@ def main():
         r32[k] = r3
 
     # 申请人数实验
-        M = 4
-        K = 50
-        for n in range(T):
-            N = n + 1
-            r1, r2, r3 = run_process(N, M, K)
-            r13[k] = r1
-            r23[k] = r2
-            r33[k] = r3
+    M = 4
+    K = 50
+    for n in range(T):
+        N = n + 1
+        r1, r2, r3 = run_process(N, M, K)
+        r13[k] = r1
+        r23[k] = r2
+        r33[k] = r3
 
 
     k = np.arange(1,T+1)
