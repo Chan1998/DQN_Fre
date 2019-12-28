@@ -4,6 +4,15 @@
     <list default="true" id="d19da8ca-d545-4d22-8669-d3ec1b5843bd" name="默认" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/Martix_def.py" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Martix_def.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/图表——贪心/10U.png" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/图表——贪心/10U.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/图表——贪心/10b.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/图表——贪心/10f.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/图表——贪心/20B.png" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/图表——贪心/20B.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/图表——贪心/20F.png" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/图表——贪心/20F.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/图表——贪心/20u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/图表——贪心/25B.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/图表——贪心/25F.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/图表——贪心/25U.png" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -277,7 +286,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

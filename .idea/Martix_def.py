@@ -9,7 +9,7 @@ import seaborn as sns
 #K = 100              #可用基站频点
 #N = 70             #申请用户数量
 EPXILONG = 0.1      #设置ε值
-T = 200              #设置测试大小
+T = 100              #设置测试大小
 
 def Location_matrix_df(n,m,k):
     Location_matrix = np.zeros(shape=(n,m,k),dtype=int)
@@ -253,50 +253,50 @@ def main():
     N = 100
     K = 10
     for m in range(T):
-        M = m + 1
+        M = m + 3
         r1, r2, r3 = run_process(N, M, K)
-        r12[k] = r1
-        r22[k] = r2
-        r32[k] = r3
+        r12[m] = r1
+        r22[m] = r2
+        r32[m] = r3
 
     # 申请人数实验
     M = 4
     K = 50
     for n in range(T):
-        N = n + 1
+        N = n + 3
         r1, r2, r3 = run_process(N, M, K)
-        r13[k] = r1
-        r23[k] = r2
-        r33[k] = r3
+        r13[n] = r1
+        r23[n] = r2
+        r33[n] = r3
 
 
     k = np.arange(1,T+1)
-    plt.plot(k,r11,color='r',linestyle=':',marker='^',label='random')
-    plt.plot(k,r21,color='c',linestyle='-.',marker='o',label='Greedy')
-    plt.plot(k,r31,color='y',linestyle='-',marker='*',label='Ep_Greedy')
+    plt.plot(k,np.log(r11+1e-5),color='r',linestyle=':',marker='^',label='random')
+    plt.plot(k,np.log(r21+1e-5),color='c',linestyle='-.',marker='o',label='Greedy')
+    plt.plot(k,np.log(r31+1e-5),color='y',linestyle='-',marker='*',label='Ep_Greedy')
     plt.legend()
     plt.xlabel("Frequence")
     plt.ylabel("H")
     plt.title("Frequence_influence")
-    plt.savefig("200F")
+    plt.savefig("100F")
     plt.figure()
-    plt.plot(k, r12,color='r',linestyle=':',marker='^',label='random')
-    plt.plot(k, r22, color='c',linestyle='-.',marker='o',label='Greedy')
-    plt.plot(k, r32,color='y',linestyle='-',marker='*',label='Ep_Greedy')
+    plt.plot(k, np.log(r12+1e-5),color='r',linestyle=':',marker='^',label='random')
+    plt.plot(k, np.log(r22+1e-5), color='c',linestyle='-.',marker='o',label='Greedy')
+    plt.plot(k, np.log(r32+1e-5),color='y',linestyle='-',marker='*',label='Ep_Greedy')
     plt.legend()
     plt.xlabel("Base")
     plt.ylabel("H")
     plt.title("Base_influence")
-    plt.savefig("200B")
+    plt.savefig("100B")
     plt.figure()
-    plt.plot(k, r13,color='r',linestyle=':',marker='^',label='random')
-    plt.plot(k, r23, color='c',linestyle='-.',marker='o',label='Greedy')
-    plt.plot(k, r33, color='y',linestyle='-',marker='*',label='Ep_Greedy')
+    plt.plot(k, np.log(r13+1e-5),color='r',linestyle=':',marker='^',label='random')
+    plt.plot(k, np.log(r23+1e-5), color='c',linestyle='-.',marker='o',label='Greedy')
+    plt.plot(k, np.log(r33+1e-5), color='y',linestyle='-',marker='*',label='Ep_Greedy')
     plt.xlabel("Applaction")
     plt.ylabel("H")
     plt.title("Users_influence")
     plt.legend()
-    plt.savefig("200U")
+    plt.savefig("100U")
     plt.show()
 
 
